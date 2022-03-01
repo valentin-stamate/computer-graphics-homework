@@ -78,7 +78,6 @@ void Display5() {
 	glVertex2f(0.5, 0.625);
 	glVertex2f(1, 0.875);
 	glVertex2f(1, 1);
-	glVertex2f(0.5, 0.5);
 	glEnd();
 }
 
