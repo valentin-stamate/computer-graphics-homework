@@ -123,24 +123,24 @@ void Display8() {
 	// trasare poligon convex GL_QUADS : (v0,v1,v2, ..., v_{n-1})
 	// red hexagon
 	glBegin(GL_POLYGON);
-	glVertex2f(0.4 * 0.7, 0.7 * 0.7);
-	glVertex2f(0.8 * 0.7, 0.7 * 0);
-	glVertex2f(0.4 * 0.7, 0.7 * -0.7);
-	glVertex2f(-0.4 * 0.7, 0.7 * -0.7);
-	glVertex2f(-0.8 * 0.7, 0.7 * 0);
-	glVertex2f(-0.4 * 0.7, 0.7 * 0.7);
+	glVertex2f(0.28, 0.49);
+	glVertex2f(0.56, 0);
+	glVertex2f(0.28, -0.49);
+	glVertex2f(-0.28, -0.49);
+	glVertex2f(-0.56, 0);
+	glVertex2f(-0.28, 0.49);
 	glEnd();
 
 	glColor3f(1, 1, 1);// white
 	// trasare poligon convex GL_QUADS : (v0,v1,v2, ..., v_{n-1})
 	// blue hexagon
 	glBegin(GL_POLYGON);
-	glVertex2f(0.4 * 0.67, 0.67 * 0.7);
-	glVertex2f(0.8 * 0.67, 0.67 * 0);
-	glVertex2f(0.4 * 0.67, 0.67 * -0.7);
-	glVertex2f(-0.4 * 0.67, 0.67 * -0.7);
-	glVertex2f(-0.8 * 0.67, 0.67 * 0);
-	glVertex2f(-0.4 * 0.67, 0.67 * 0.7);
+	glVertex2f(0.268, 0.469);
+	glVertex2f(0.536, 0);
+	glVertex2f(0.268, -0.469);
+	glVertex2f(-0.268, -0.469);
+	glVertex2f(-0.536, 0);
+	glVertex2f(-0.268, 0.469);
 	glEnd();
 }
 
