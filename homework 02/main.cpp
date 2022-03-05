@@ -1,9 +1,11 @@
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "cert-flp30-c"
+#pragma ide diagnostic ignored "cppcoreguidelines-narrowing-conversions"
 
 #include <cstdlib>
-#include <cstdio>
 #include <cmath>
 
-#include "glut.h"
+#include <glut.h>
 
 // dimensiunea ferestrei in pixeli
 #define dim 300
@@ -26,7 +28,7 @@ void Display1() {
     xmax = a - b - 1;
     xmin = a + b + 1;
     ymax = ymin = 0;
-    for (double t = -pi / 2 + ratia; t < pi / 2; t += ratia) {
+    for (t = -pi / 2 + ratia; t < pi / 2; t += ratia) {
         double x1, y1, x2, y2;
         x1 = a + b * cos(t);
         xmax = (xmax < x1) ? x1 : xmax;
@@ -52,11 +54,9 @@ void Display1() {
     glColor3f(1, 0.1, 0.1); // rosu
     glBegin(GL_LINE_STRIP);
     for (t = -pi / 2 + ratia; t < pi / 2; t += ratia) {
-        double x1, y1, x2, y2;
+        double x1, y1;
         x1 = (a + b * cos(t)) / xmax;
-        x2 = (a - b * cos(t)) / xmax;
         y1 = (a * tan(t) + b * sin(t)) / ymax;
-        y2 = (a * tan(t) - b * sin(t)) / ymax;
 
         glVertex2f(x1, y1);
     }
@@ -64,10 +64,8 @@ void Display1() {
 
     glBegin(GL_LINE_STRIP);
     for (t = -pi / 2 + ratia; t < pi / 2; t += ratia) {
-        double x1, y1, x2, y2;
-        x1 = (a + b * cos(t)) / xmax;
+        double x2, y2;
         x2 = (a - b * cos(t)) / xmax;
-        y1 = (a * tan(t) + b * sin(t)) / ymax;
         y2 = (a * tan(t) - b * sin(t)) / ymax;
 
         glVertex2f(x2, y2);
@@ -95,11 +93,13 @@ void Display2() {
     }
     glEnd();
 }
+
 double f_2_1(double x) {
     if (x == 0)
         return 1;
     return fabs(x - floor(x + 0.5)) / x;
 }
+
 void Display3() {
     float xmax = 100;
     float ymax = 1;
@@ -115,6 +115,7 @@ void Display3() {
     }
     glEnd();
 }
+
 void Display4() {
     double a = 0.3;
     double b = 0.2;
@@ -180,7 +181,6 @@ void Display5() {
     glVertex2f(xStart, yStart);
     //glVertex2f(xStart, -pi / 2);
 
-    double lastX;
 
     for (double t = -pi / 2; t < -pi / 6; t += ratia) {
 
@@ -188,7 +188,6 @@ void Display5() {
         double y = (a * tan(t)) / (4 * cos(t) * cos(t) - 3);
 
         if (x >= xStart && y <= yStart) {
-            lastX = x;
             glVertex2f(x, y);
         }
 
@@ -256,6 +255,7 @@ void Display7() {
     }
     glEnd();
 }
+
 void Display8() {
     double r = 0.3;
     double R = 0.1;
@@ -287,6 +287,7 @@ void Display8() {
     }
     glEnd();
 }
+
 void Display9() {
     double pi = 4 * atan(1.0);
     double tmax = pi / 4;
@@ -339,14 +340,14 @@ void Display9() {
     }
     glEnd();
 }
+
 void Display10() {
-    double pi = 4 * atan(1.0);
     double tmax = 9.45;
 
     double xmax = INT_MIN;
     double ymax = INT_MIN;
 
-    double ratia = 0.00001;
+    double ratia = 0.01;
     double a = 0.02;
 
     for (double t = ratia; t < tmax; t += ratia) {
@@ -375,7 +376,7 @@ void Display10() {
 }
 
 
-void Init(void) {
+void Init() {
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
 
@@ -386,7 +387,7 @@ void Init(void) {
     glPolygonMode(GL_FRONT, GL_LINE);
 }
 
-void Display(void) {
+void Display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     switch (prevKey) {
@@ -428,7 +429,7 @@ void Display(void) {
 }
 
 void Reshape(int w, int h) {
-    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+    glViewport(0, 0, (GLsizei) w, (GLsizei) h);
 }
 
 void KeyboardFunc(unsigned char key, int x, int y) {
@@ -441,7 +442,7 @@ void KeyboardFunc(unsigned char key, int x, int y) {
 void MouseFunc(int button, int state, int x, int y) {
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
 
     glutInit(&argc, argv);
 
@@ -467,3 +468,5 @@ int main(int argc, char** argv) {
 
     return 0;
 }
+
+#pragma clang diagnostic pop
