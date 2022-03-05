@@ -138,37 +138,74 @@ void Display4() {
 	glEnd();
 
 }
+
 void Display5() {
+	double pi = 4 * atan(1.0);
+	double ratia = 0.003;
+
+	double xStart = -0.99;
+	double yStart = 0.99;
+
 	double a = 0.2;
-	double tmax = 4 * atan(1.0) / 2;
-	double xmax = INT_MIN;
-	double ymax = INT_MIN;
-	double ratia = 0.001;;
+	int count = 0;
+
 	glColor3f(1, 0.1, 0.1); // rosu
-	for (double t = -tmax; t < tmax; t += ratia) {
-		if (t == tmax / 3 || t == -tmax / 3)
-			continue;
+	glBegin(GL_TRIANGLES);
+	glVertex2f(xStart, yStart);
+
+	for (double t = -pi / 2 + ratia; t < -pi / 6; t += ratia, count++) {
+
 		double x = a / (4 * cos(t) * cos(t) - 3);
-		double y = a * tan(t) / (4 * cos(t) * cos(t) - 3);
-		xmax = fmax(xmax, fabs(x));
-		ymax = fmax(ymax, fabs(y));
-	}
-	glBegin(GL_LINE_STRIP);
-	for (double t = -tmax; t < tmax; t += ratia) {
-		double x = a / (4 * cos(t) * cos(t) - 3) / xmax;
-		double y = a * tan(t) / (4 * cos(t) * cos(t) - 3) / ymax;
-		glVertex2f(x, y);
+		double y = (a * tan(t)) / (4 * cos(t) * cos(t) - 3);
+
+		double xNext = a / (4 * cos(t + ratia) * cos(t + ratia) - 3);
+		double yNext = (a * tan(t + ratia)) / (4 * cos(t + ratia) * cos(t + ratia) - 3);
+
+		if (x >= xStart && y <= yStart && y > 0.2) {
+			if (count % 3 == 1) {
+				glVertex2f(x, y);
+				glVertex2f(xNext, yNext);
+				glVertex2f(xStart, yStart);
+			}
+
+		}
 
 	}
+
 	glEnd();
+
+	glColor3f(0.1, 0.1, 0.1);
+	glBegin(GL_LINE_LOOP);
+
+	glVertex2f(xStart, yStart);
+	//glVertex2f(xStart, -pi / 2);
+
+	double lastX;
+
+	for (double t = -pi / 2; t < -pi / 6; t += ratia) {
+
+		double x = a / (4 * cos(t) * cos(t) - 3);
+		double y = (a * tan(t)) / (4 * cos(t) * cos(t) - 3);
+
+		if (x >= xStart && y <= yStart) {
+			lastX = x;
+			glVertex2f(x, y);
+		}
+
+	}
+
+	glEnd();
+
+
 }
+
 void Display6() {
 	double a = 0.1;
 	double b = 0.2;
 	double tmax = 10;
 	double xmax = INT_MIN;
 	double ymax = INT_MIN;
-	double ratia = 0.0001;
+	double ratia = 0.001;
 	glColor3f(1, 0.1, 0.1); // rosu
 	for (double t = 0; t < tmax; t += ratia) {
 		double x = a * t - b * sin(t);
@@ -180,17 +217,162 @@ void Display6() {
 	glBegin(GL_LINE_STRIP);
 	for (double t = -tmax; t < tmax; t += ratia) {
 		double x = (a * t - b * sin(t)) / xmax;
-		double y = (a * t - b * cos(t)) / ymax;
-		glVertex2f(t, x);
-		glVertex2f(t, y);
+		double y = (a - b * cos(t)) / ymax;
+		glVertex2f(x, y);
 	}
 	glEnd();
 
 }
-void Display7() {}
-void Display8() {}
-void Display9() {}
-void Display10() {}
+
+// Epicicloida
+void Display7() {
+	double r = 0.3;
+	double R = 0.1;
+
+	double pi = 4 * atan(1.0);
+	double tmax = 2 * pi;
+
+	double xmax = INT_MIN;
+	double ymax = INT_MIN;
+
+	double ratia = 0.001;
+
+	glColor3f(1, 0.1, 0.1); // rosu
+
+	for (double t = 0; t < tmax; t += ratia) {
+		double x = (R + r) * cos(r * t / R) - r * cos(t +  r * t / R);
+		double y = (R + r) * sin(r * t / R) - r * sin(t + r * t / R);
+
+		xmax = fmax(xmax, fabs(x));
+		ymax = fmax(ymax, fabs(y));
+	}
+
+	glBegin(GL_LINE_STRIP);
+	for (double t = 0; t < tmax; t += ratia) {
+		double x = ((R + r) * cos(r * t / R) - r * cos(t + r * t / R)) / xmax;
+		double y = ((R + r) * sin(r * t / R) - r * sin(t + r * t / R)) / ymax;
+
+		glVertex2f(x, y);
+	}
+	glEnd();
+}
+void Display8() {
+	double r = 0.3;
+	double R = 0.1;
+
+	double pi = 4 * atan(1.0);
+	double tmax = 2 * pi;
+
+	double xmax = INT_MIN;
+	double ymax = INT_MIN;
+
+	double ratia = 0.001;
+
+	glColor3f(1, 0.1, 0.1); // rosu
+
+	for (double t = 0; t < tmax; t += ratia) {
+		double x = (R - r) * cos(r * t / R) - r * cos(t - r * t / R);
+		double y = (R - r) * sin(r * t / R) - r * sin(t - r * t / R);
+
+		xmax = fmax(xmax, fabs(x));
+		ymax = fmax(ymax, fabs(y));
+	}
+
+	glBegin(GL_LINE_STRIP);
+	for (double t = 0; t < tmax; t += ratia) {
+		double x = ((R - r) * cos(r * t / R) - r * cos(t - r * t / R)) / xmax;
+		double y = ((R - r) * sin(r * t / R) - r * sin(t - r * t / R)) / ymax;
+
+		glVertex2f(x, y);
+	}
+	glEnd();
+}
+void Display9() {
+	double pi = 4 * atan(1.0);
+	double tmax = pi / 4;
+
+	double xmax = INT_MIN;
+	double ymax = INT_MIN;
+	double xmaxN = INT_MIN;
+	double ymaxN = INT_MIN;
+
+	double ratia = 0.00001;
+	double a = 0.4;
+
+	for (double t = -tmax + ratia; t < tmax; t += ratia) {
+		double r = a * sqrt(2 * cos(2 * t));
+		double rN = -r;
+
+		double x = r * cos(t);
+		double y = r * sin(t);
+
+		double xN = rN * cos(t);
+		double yN = rN * sin(t);
+
+		xmax = fmax(xmax, fabs(x));
+		ymax = fmax(ymax, fabs(y));
+
+		xmaxN = fmax(xmaxN, fabs(xN));
+		ymaxN = fmax(ymaxN, fabs(yN));
+	}
+
+	glColor3f(1, 0.1, 0.1); // rosu
+	glBegin(GL_LINE_STRIP);
+
+	for (double t = -tmax + ratia; t < tmax; t += ratia) {
+		double r = a * sqrt(2 * cos(2 * t));
+
+		double x = r * cos(t) / (xmax * 2);
+		double y = r * sin(t) / (ymax * 2);
+
+		glVertex2f(x, y);
+	}
+
+	for (double t = -tmax + ratia; t < tmax; t += ratia) {
+		double r = a * sqrt(2 * cos(2 * t));
+		double rN = -r;
+
+		double xN = rN * cos(t) / (xmaxN * 2);
+		double yN = rN * sin(t) / (ymaxN * 2);
+
+		glVertex2f(xN, yN);
+	}
+	glEnd();
+}
+void Display10() {
+	double pi = 4 * atan(1.0);
+	double tmax = 9.45;
+
+	double xmax = INT_MIN;
+	double ymax = INT_MIN;
+
+	double ratia = 0.00001;
+	double a = 0.02;
+
+	for (double t = ratia; t < tmax; t += ratia) {
+		double r = a * exp(1 + t);
+
+		double x = r * cos(t);
+		double y = r * sin(t);
+
+		xmax = fmax(xmax, fabs(x));
+		ymax = fmax(ymax, fabs(y));
+	}
+
+	glColor3f(1, 0.1, 0.1); // rosu
+	glBegin(GL_LINE_STRIP);
+
+	for (double t = ratia; t < tmax; t += ratia) {
+		double r = a * exp(1 + t);
+
+		double x = r * cos(t) / xmax;
+		double y = r * sin(t) / ymax;
+
+		glVertex2f(x, y);
+	}
+
+	glEnd();
+}
 
 
 void Init(void) {
