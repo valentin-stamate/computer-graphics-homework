@@ -295,7 +295,7 @@ void Display9() {
     double xmaxN = INT_MIN;
     double ymaxN = INT_MIN;
 
-    double ratia = 0.00001;
+    double ratia = 0.001;
     double a = 0.4;
 
     for (double t = -tmax + ratia; t < tmax; t += ratia) {
@@ -318,6 +318,15 @@ void Display9() {
     glColor3f(1, 0.1, 0.1); // rosu
     glBegin(GL_LINE_STRIP);
 
+    for (double t = tmax - ratia; t > -tmax; t -= ratia) {
+        double r = a * sqrt(2 * cos(2 * t));
+        double rN = -r;
+
+        double xN = rN * cos(t) / (xmaxN * 2);
+        double yN = rN * sin(t) / (ymaxN * 2);
+
+        glVertex2f(xN, yN);
+    }
     for (double t = -tmax + ratia; t < tmax; t += ratia) {
         double r = a * sqrt(2 * cos(2 * t));
 
@@ -327,15 +336,6 @@ void Display9() {
         glVertex2f(x, y);
     }
 
-    for (double t = -tmax + ratia; t < tmax; t += ratia) {
-        double r = a * sqrt(2 * cos(2 * t));
-        double rN = -r;
-
-        double xN = rN * cos(t) / (xmaxN * 2);
-        double yN = rN * sin(t) / (ymaxN * 2);
-
-        glVertex2f(xN, yN);
-    }
     glEnd();
 }
 
