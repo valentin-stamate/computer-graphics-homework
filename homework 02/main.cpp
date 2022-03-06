@@ -142,7 +142,7 @@ void Display4() {
 
 void Display5() {
     double pi = 4 * atan(1.0);
-    double ratia = 0.003;
+    double ratia = 0.005;
 
     double xStart = -0.99;
     double yStart = 0.99;
@@ -163,7 +163,7 @@ void Display5() {
         double yNext = (a * tan(t + ratia)) / (4 * cos(t + ratia) * cos(t + ratia) - 3);
 
         if (x >= xStart && y <= yStart && y > 0.2) {
-            if (count % 3 == 1) {
+            if (count % 4 == 2) {
                 glVertex2f(x, y);
                 glVertex2f(xNext, yNext);
                 glVertex2f(xStart, yStart);
@@ -179,8 +179,7 @@ void Display5() {
     glBegin(GL_LINE_LOOP);
 
     glVertex2f(xStart, yStart);
-    //glVertex2f(xStart, -pi / 2);
-
+    glVertex2f(a / (4 * cos(-pi / 2) * cos(-pi / 2) - 3), yStart);
 
     for (double t = -pi / 2; t < -pi / 6; t += ratia) {
 
@@ -192,7 +191,6 @@ void Display5() {
         }
 
     }
-
     glEnd();
 
 
