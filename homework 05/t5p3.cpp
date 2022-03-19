@@ -542,6 +542,7 @@ void Display4() {
 
 void Display5() {
     CImage1 image1;
+    image1.afisare(1, nivel);
 
     char c[3];
     sprintf(c, "%2d", nivel);
@@ -555,7 +556,6 @@ void Display5() {
     glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[0]);
     glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[1]);
 
-    image1.afisare(1, nivel);
     nivel++;
 }
 
