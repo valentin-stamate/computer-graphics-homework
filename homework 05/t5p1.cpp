@@ -1,5 +1,7 @@
 #pragma clang diagnostic push
+#pragma ide diagnostic ignored "bugprone-branch-clone"
 #pragma ide diagnostic ignored "cert-flp30-c"
+
 #include <cstdlib>
 #include <cstdio>
 #include <cmath>
@@ -205,23 +207,20 @@ public:
     }
 
     int isIn(CComplex &x, const CComplex &c) {
-        int rez = 0;
         CComplex z0, z1;
 
         z0 = x;
         for (int i = 1; i < m.nriter; i++) {
             z1 = z0 * z0 + c;
             if (z1 == z0) {
-                rez = -1;
-                break;
+                return i;
             } else if (z1.getModul() > m.modmax) {
-                rez = 1;
-                break;
+                return i;
             }
             z0 = z1;
         }
 
-        return rez;
+        return 0;
     }
 
     void display(double xmin, double ymin, double xmax, double ymax) {
@@ -237,8 +236,13 @@ public:
                 CComplex z(x, y);
                 int r = isIn(z, CComplex(x, y));
                 if (r == 0) {
+                    glColor3f(1.0, 0.1, 0.1);
+                    glVertex3d(x, y, 0);
+                } else {
+                    glColor3f(1.0 * r / m.nriter, 1.0 * (r - 1) / m.nriter, 1.0 * (m.nriter - r) / m.nriter);
                     glVertex3d(x, y, 0);
                 }
+
             }
         fprintf(stdout, "STOP\n");
         glEnd();
@@ -277,9 +281,8 @@ void Display2() {
 // multimea Mandelbrot
 void Display3() {
     CMandelbrot cmb;
-
-    glColor3f(1.0, 0.1, 0.1);
     cmb.setnriter(20);
+    cmb.setmodmax(2.0);
     cmb.display(-2, -2, 2, 2);
 }
 
@@ -355,7 +358,6 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
 
 
 #pragma clang diagnostic pop
