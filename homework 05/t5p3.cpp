@@ -9,7 +9,7 @@
 #include "glut.h"
 
 // dimensiunea ferestrei in pixeli
-#define dim 300
+#define dim 900
 
 unsigned char prevKey;
 int nivel = 0;
@@ -395,6 +395,93 @@ public:
     }
 };
 
+/* Sierpiński triangle */
+class CImage3 {
+public:
+    void image3(CPunct p, CVector v, double length, int level, int angleOffset) {
+        int rotation = level % 2 == 0 ? -1 : 1;
+
+        if (level == 0) {
+//            drawTriangle(length, p, v);
+            drawTriangleLines(length, p, v, angleOffset);
+            return;
+        }
+
+        double newLen = length / 2;
+
+        CPunct pNew = v.getDest(p, newLen);
+        image3(pNew, v, newLen, level - 1, angleOffset);
+
+        v.rotatie(120);
+        pNew = v.getDest(p, newLen);
+        image3(pNew, v, newLen, level - 1, angleOffset + 120 * rotation);
+
+        v.rotatie(120);
+        pNew = v.getDest(p, newLen);
+        image3(pNew, v, newLen, level - 1, angleOffset - 120 * rotation);
+    }
+
+    void drawTriangle(double length, CPunct p, CVector v) {
+        /* Rotatia curenta a lui v reprezinta varful triunghiului */
+        double x, y;
+
+        CPunct a = v.getDest(p, length);
+        v.rotatie(120);
+        CPunct b = v.getDest(p, length);
+        v.rotatie(120);
+        CPunct c = v.getDest(p, length);
+
+        glColor3f(0.1, 1.0, 0.1);
+        glBegin(GL_LINE_LOOP);
+
+        a.getxy(x, y);
+        glVertex2d(x, y);
+        b.getxy(x, y);
+        glVertex2d(x, y);
+        c.getxy(x, y);
+        glVertex2d(x, y);
+        glEnd();
+    }
+
+    void drawTriangleLines(double length, CPunct p, CVector v, int angleOffset) {
+        /* Rotatia curenta a lui v reprezinta varful triunghiului */
+        double x, y;
+        v.rotatie(angleOffset);
+
+        v.rotatie(-60);
+        CPunct a = v.getDest(p, length / 2);
+
+        v.rotatie(120);
+        CPunct b = v.getDest(p, length / 2);
+
+        v.rotatie(60);
+        CPunct c = v.getDest(p, length);
+
+        v.rotatie(120);
+        CPunct d = v.getDest(p, length);
+
+        glColor3f(1.0, 0.1, 0.1);
+        glBegin(GL_LINE_STRIP);
+        d.getxy(x, y);
+        glVertex2d(x, y);
+        a.getxy(x, y);
+        glVertex2d(x, y);
+        b.getxy(x, y);
+        glVertex2d(x, y);
+        c.getxy(x, y);
+        glVertex2d(x, y);
+        glEnd();
+    }
+
+    void afisare(double lungime, int nivel) {
+        CVector v(0.0, 1.0);
+        CPunct p(0.0, 0);
+
+        image3(p, v, 2, nivel, 0);
+    }
+};
+
+
 // afisare curba lui Koch "fulg de zapada"
 void Display1() {
     CCurbaKoch cck;
@@ -583,6 +670,30 @@ void Display6() {
     nivel++;
 }
 
+void Display7() {
+    CImage3 image3;
+
+    char c[3];
+    sprintf(c, "%2d", nivel);
+    glRasterPos2d(-0.98, -0.98);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'N');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'i');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'v');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'e');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, 'l');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, '=');
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[0]);
+    glutBitmapCharacter(GLUT_BITMAP_9_BY_15, c[1]);
+
+    glPushMatrix();
+    glLoadIdentity();
+    glScaled(0.4, 0.4, 1);
+    glTranslated(-0.5, -0.5, 0.0);
+    image3.afisare(1, nivel);
+    glPopMatrix();
+    nivel++;
+}
+
 void Init(void) {
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -627,7 +738,7 @@ void Display(void) {
             break;
         case '7':
             glClear(GL_COLOR_BUFFER_BIT);
-            Display6();
+            Display7();
             break;
         default:
             break;
