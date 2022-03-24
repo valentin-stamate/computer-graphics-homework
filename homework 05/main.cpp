@@ -1,18 +1,265 @@
-#define _CRT_SECURE_NO_WARNINGS
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "bugprone-branch-clone"
+#pragma ide diagnostic ignored "cert-flp30-c"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <math.h>
-#include <assert.h>
+
+#include <cstdlib>
+#include <cstdio>
+#include <cmath>
+#include <cassert>
 #include <float.h>
 
 #include "glut.h"
 
 // dimensiunea ferestrei in pixeli
 #define dim 900
-
+// dimensiunea ferestrei in pixeli
+#define dim 300
+// numarul maxim de iteratii pentru testarea apartenentei la mult.Julia-Fatou
+#define NRITER_JF 5000
+// modulul maxim pentru testarea apartenentei la mult.Julia-Fatou
+#define MODMAX_JF 10000000
+// ratii ptr. CJuliaFatou
+#define RX_JF 0.01
+#define RY_JF 0.01
+// ratii pt Mandelbrot
 unsigned char prevKey;
 int nivel = 0;
+
+class CComplex {
+public:
+    CComplex() : re(0.0), im(0.0) {}
+
+    CComplex(double re1, double im1) : re(re1 * 1.0), im(im1 * 1.0) {}
+
+    CComplex(const CComplex &c) : re(c.re), im(c.im) {}
+
+    ~CComplex() {}
+
+    CComplex &operator=(const CComplex &c) {
+        re = c.re;
+        im = c.im;
+        return *this;
+    }
+
+    double getRe() { return re; }
+
+    void setRe(double re1) { re = re1; }
+
+    double getIm() { return im; }
+
+    void setIm(double im1) { im = im1; }
+
+    double getModul() { return sqrt(re * re + im * im); }
+
+    int operator==(CComplex &c1) {
+        return ((re == c1.re) && (im == c1.im));
+    }
+
+    CComplex pow2() {
+        CComplex rez;
+        rez.re = powl(re * 1.0, 2) - powl(im * 1.0, 2);
+        rez.im = 2.0 * re * im;
+        return rez;
+    }
+
+    friend CComplex operator+(const CComplex &c1, const CComplex &c2);
+
+    friend CComplex operator*(CComplex &c1, CComplex &c2);
+
+    void print(FILE *f) {
+        fprintf(f, "%.20f%+.20f i", re, im);
+    }
+
+private:
+    double re, im;
+};
+
+CComplex operator+(const CComplex &c1, const CComplex &c2) {
+    CComplex rez(c1.re + c2.re, c1.im + c2.im);
+    return rez;
+}
+
+CComplex operator*(CComplex &c1, CComplex &c2) {
+    CComplex rez(c1.re * c2.re - c1.im * c2.im,
+                 c1.re * c2.im + c1.im * c2.re);
+    return rez;
+}
+
+class CJuliaFatou {
+public:
+    CJuliaFatou() {
+        // m.c se initializeaza implicit cu 0+0i
+
+        m.nriter = NRITER_JF;
+        m.modmax = MODMAX_JF;
+    }
+
+    CJuliaFatou(CComplex &c) {
+        m.c = c;
+        m.nriter = NRITER_JF;
+        m.modmax = MODMAX_JF;
+    }
+
+    ~CJuliaFatou() {}
+
+    void setmodmax(double v) {
+        assert(v <= MODMAX_JF);
+        m.modmax = v;
+    }
+
+    double getmodmax() { return m.modmax; }
+
+    void setnriter(int v) {
+        assert(v <= NRITER_JF);
+        m.nriter = v;
+    }
+
+    int getnriter() { return m.nriter; }
+
+    // testeaza daca x apartine multimii Julia-Fatou Jc
+    // returneaza 0 daca apartine, -1 daca converge finit, +1 daca converge infinit
+    int isIn(CComplex &x) {
+        int rez = 0;
+        // tablou in care vor fi memorate valorile procesului iterativ z_n+1 = z_n * z_n + c
+        CComplex z0, z1;
+
+        z0 = x;
+        for (int i = 1; i < m.nriter; i++) {
+            z1 = z0 * z0 + m.c;
+            if (z1 == z0) {
+                // x nu apartine m.J-F deoarece procesul iterativ converge finit
+                rez = -1;
+                break;
+            } else if (z1.getModul() > m.modmax) {
+                // x nu apartine m.J-F deoarece procesul iterativ converge la infinit
+                rez = 1;
+                break;
+            }
+            z0 = z1;
+        }
+
+        return rez;
+    }
+
+    // afisarea multimii J-F care intersecteaza multimea argument
+    void display(double xmin, double ymin, double xmax, double ymax) {
+        glPushMatrix();
+        glLoadIdentity();
+
+//        glTranslated((xmin + xmax) * 1.0 / (xmin - xmax), (ymin + ymax) * 1.0 / (ymin - ymax), 0);
+//        glScaled(1.0 / (xmax - xmin), 1.0 / (ymax - ymin), 1);
+        // afisarea propriu-zisa
+        glBegin(GL_POINTS);
+        for (double x = xmin; x <= xmax; x += RX_JF)
+            for (double y = ymin; y <= ymax; y += RY_JF) {
+                CComplex z(x, y);
+                int r = isIn(z);
+//        z.print(stdout);
+                if (r == 0) {
+//          fprintf(stdout, "   \n");
+                    glVertex3d(x, y, 0);
+                } else if (r == -1) {
+//          fprintf(stdout, "   converge finit\n");
+                } else if (r == 1) {
+//          fprintf(stdout, "   converge infinit\n");
+                }
+            }
+        fprintf(stdout, "STOP\n");
+        glEnd();
+
+        glPopMatrix();
+    }
+
+private:
+    struct SDate {
+        CComplex c;
+        // nr. de iteratii
+        int nriter;
+        // modulul maxim
+        double modmax;
+    } m;
+};
+
+// MANDELBROT *****************************
+class CMandelbrot {
+public:
+    CMandelbrot() {
+        // m.c se initializeaza implicit cu 0+0i
+
+        m.nriter = NRITER_JF;
+        m.modmax = MODMAX_JF;
+    }
+
+    CMandelbrot(CComplex &c) {
+        m.c = c;
+        m.nriter = NRITER_JF;
+        m.modmax = MODMAX_JF;
+    }
+
+    ~CMandelbrot() {}
+
+    void setmodmax(double v) {
+        assert(v <= MODMAX_JF);
+        m.modmax = v;
+    }
+
+    void setnriter(int v) {
+        assert(v <= NRITER_JF);
+        m.nriter = v;
+    }
+
+    int isIn(CComplex &x, const CComplex &c) {
+        CComplex z0, z1;
+
+        z0 = x;
+        for (int i = 1; i < m.nriter; i++) {
+            z1 = z0 * z0 + c;
+            if (z1 == z0) {
+                return i;
+            } else if (z1.getModul() > m.modmax) {
+                return i;
+            }
+            z0 = z1;
+        }
+
+        return 0;
+    }
+
+    void display(double xmin, double ymin, double xmax, double ymax) {
+        glPushMatrix();
+        glLoadIdentity();
+
+        glTranslated((xmin + xmax) * 2.5 / (xmin - xmax), (ymin + ymax) * 2.5 / (ymin - ymax), 0);
+        glScaled(2.5 / (xmax - xmin), 2.5 / (ymax - ymin), 1);
+        // afisarea propriu-zisa
+        glBegin(GL_POINTS);
+        for (double x = xmin; x <= xmax; x += RX_JF)
+            for (double y = ymin; y <= ymax; y += RY_JF) {
+                CComplex z(x, y);
+                int r = isIn(z, CComplex(x, y));
+                if (r == 0) {
+                    glColor3f(1.0, 0.1, 0.1);
+                    glVertex3d(x, y, 0);
+                } else {
+                    glColor3f(1.0 * r / m.nriter, 1.0 * (r - 1) / m.nriter, 1.0 * (m.nriter - r) / m.nriter);
+                    glVertex3d(x, y, 0);
+                }
+
+            }
+        fprintf(stdout, "STOP\n");
+        glEnd();
+
+        glPopMatrix();
+    }
+
+private:
+    struct SDate {
+        CComplex c;
+        int nriter;
+        double modmax;
+    } m;
+};
 
 
 class C2coord {
@@ -694,6 +941,34 @@ void Display7() {
     nivel++;
 }
 
+// multimea Julia-Fatou pentru z0 = 0 si c = -0.12375+0.056805i
+void Display8() {
+    CComplex c(-0.12375, 0.056805);
+    CJuliaFatou cjf(c);
+
+    glColor3f(1.0, 0.1, 0.1);
+    cjf.setnriter(30);
+    cjf.display(-0.8, -0.4, 0.8, 0.4);
+}
+
+// multimea Julia-Fatou pentru z0 = 0 si c = -0.012+0.74i
+void Display9() {
+    CComplex c(-0.012, 0.74);
+    CJuliaFatou cjf(c);
+
+    glColor3f(1.0, 0.1, 0.1);
+    cjf.setnriter(30);
+    cjf.display(-1, -1, 1, 1);
+}
+
+// multimea Mandelbrot
+void Display10() {
+    CMandelbrot cmb;
+    cmb.setnriter(20);
+    cmb.setmodmax(2.0);
+    cmb.display(-2, -2, 2, 2);
+}
+
 void Init(void) {
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -739,6 +1014,18 @@ void Display(void) {
         case '7':
             glClear(GL_COLOR_BUFFER_BIT);
             Display7();
+            break;
+        case '8':
+            glClear(GL_COLOR_BUFFER_BIT);
+            Display8();
+            break;
+        case '9':
+            glClear(GL_COLOR_BUFFER_BIT);
+            Display9();
+            break;
+        case '-':
+            glClear(GL_COLOR_BUFFER_BIT);
+            Display10();
             break;
         default:
             break;
@@ -788,3 +1075,4 @@ int main(int argc, char **argv) {
 }
 
 
+#pragma clang diagnostic pop
