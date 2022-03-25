@@ -13,8 +13,6 @@
 
 // dimensiunea ferestrei in pixeli
 #define dim 900
-// dimensiunea ferestrei in pixeli
-#define dim 300
 // numarul maxim de iteratii pentru testarea apartenentei la mult.Julia-Fatou
 #define NRITER_JF 5000
 // modulul maxim pentru testarea apartenentei la mult.Julia-Fatou
