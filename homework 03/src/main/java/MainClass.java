@@ -20,8 +20,6 @@ public class MainClass extends PApplet {
         frameRate(30);
 
         surface.setTitle("Homework 3");
-
-//        cartesianGrid.drawLine(15, 15, 15, 8);
     }
 
     @Override
@@ -30,7 +28,7 @@ public class MainClass extends PApplet {
 
         cartesianGrid.draw();
         cartesianGrid.drawLine(0, 0, 15, 5);
-//        cartesianGrid.drawLine(0, 15, 15, 8);
+        cartesianGrid.drawLine(0, 15, 15, 8);
     }
 
     @Override

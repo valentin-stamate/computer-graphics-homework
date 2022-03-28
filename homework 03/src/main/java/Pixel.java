@@ -26,7 +26,8 @@ public class Pixel {
         if (pixelOn) {
             pApplet.fill(30);
             pApplet.noStroke();
-            pApplet.ellipse(x, y, pixelSize, pixelSize);
+//            pApplet.ellipse(x, y, pixelSize, pixelSize);
+            drawCircle(x, y, pixelSize);
         }
     }
 
@@ -36,6 +37,22 @@ public class Pixel {
 
     public void deactivatePixel() {
         this.pixelOn = false;
+    }
+
+    private void drawCircle(int ox, int oy, int diameter) {
+        pApplet.stroke(20);
+
+        for (int y = oy - diameter / 2; y <= oy + diameter / 2; y++) {
+            for (int x = ox - diameter / 2; x <= ox + diameter / 2; x++) {
+                if (isIn(x, y, ox, oy, diameter / 2)) {
+                    pApplet.point(x, y);
+                }
+            }
+        }
+    }
+
+    public boolean isIn(int x, int y, int ox, int oy, int radius) {
+        return (x - ox) * (x - ox) + (y - oy) * (y - oy) <= radius * radius;
     }
 
 }
