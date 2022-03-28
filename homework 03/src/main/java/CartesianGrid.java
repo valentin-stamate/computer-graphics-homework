@@ -36,4 +36,8 @@ public class CartesianGrid {
         }
     }
 
+    public void activatePixel(int x, int y) {
+        pixels[y][x].activatePixel();
+    }
+
 }

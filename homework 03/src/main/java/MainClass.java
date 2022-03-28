@@ -20,6 +20,7 @@ public class MainClass extends PApplet {
         frameRate(60);
 
         cartesianGrid.start();
+        cartesianGrid.activatePixel(0, 3);
     }
 
     @Override
