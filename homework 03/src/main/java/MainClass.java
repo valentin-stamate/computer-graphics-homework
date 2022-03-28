@@ -2,20 +2,29 @@ import processing.core.PApplet;
 
 public class MainClass extends PApplet {
 
+    private final CartesianGrid cartesianGrid;
+    private final int canvasWidth = 420;
+    private final int canvasHeight = 420;
+
+
+    public MainClass() {
+        this.cartesianGrid = new CartesianGrid(this, canvasWidth , canvasHeight, 10);
+    }
+
     public void settings() {
-        size(420, 420, P2D);
+        size(canvasWidth, canvasHeight, P2D);
     }
 
     public void setup() {
-        background(25);
+        background(255);
         frameRate(60);
 
+        cartesianGrid.start();
     }
 
     @Override
     public void draw() {
-        background(20);
-        ellipse(mouseX, mouseY, 50, 50);
+        background(255);
     }
 
     @Override
