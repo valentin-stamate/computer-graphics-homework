@@ -15,13 +15,13 @@ public class Pixel {
     }
 
     public void draw() {
-        pApplet.stroke(200);
+        pApplet.stroke(80);
         pApplet.line(x, y - pixelSize / 2.0f, x, y + pixelSize / 2.0f);
         pApplet.line(x - pixelSize / 2.0f, y, x + pixelSize / 2.0f, y);
 
-        pApplet.noFill();
-        pApplet.stroke(30);
-        pApplet.rect(x - pixelSize / 2.0f, y - pixelSize / 2.0f,pixelSize, pixelSize);
+//        pApplet.noFill();
+//        pApplet.stroke(30);
+//        pApplet.rect(x - pixelSize / 2.0f, y - pixelSize / 2.0f,pixelSize, pixelSize);
 
         if (pixelOn) {
             pApplet.fill(30);

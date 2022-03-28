@@ -8,7 +8,7 @@ public class MainClass extends PApplet {
 
 
     public MainClass() {
-        this.cartesianGrid = new CartesianGrid(this, canvasWidth , canvasHeight, 10);
+        this.cartesianGrid = new CartesianGrid(this, canvasWidth , canvasHeight, 16);
     }
 
     public void settings() {
@@ -17,15 +17,20 @@ public class MainClass extends PApplet {
 
     public void setup() {
         background(255);
-        frameRate(60);
+        frameRate(30);
 
-        cartesianGrid.start();
-        cartesianGrid.activatePixel(0, 3);
+        surface.setTitle("Homework 3");
+
+//        cartesianGrid.drawLine(15, 15, 15, 8);
     }
 
     @Override
     public void draw() {
         background(255);
+
+        cartesianGrid.draw();
+        cartesianGrid.drawLine(0, 0, 15, 5);
+//        cartesianGrid.drawLine(0, 15, 15, 8);
     }
 
     @Override
