@@ -1,2 +1,2 @@
 ## Resources
-* file:///C:/Users/Valentin/Desktop/cap2e.pdf
+* https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
