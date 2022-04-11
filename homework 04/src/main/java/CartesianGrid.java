@@ -22,7 +22,7 @@ public class CartesianGrid {
 
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                pixels[i][j] = new Pixel(pApplet, i, j, pixelWidth, pixelHeight);
+                pixels[rows - i - 1][j] = new Pixel(pApplet, i, j, pixelWidth, pixelHeight);
             }
         }
     }
@@ -35,8 +35,37 @@ public class CartesianGrid {
         }
     }
 
-    public void drawCircle() {
+    /* Exercise 1 */
+    public void drawCircle(int ox, int oy, int r) {
+        pApplet.stroke(255, 20, 20);
+        pApplet.strokeWeight(2);
+        pApplet.noFill();
+        pApplet.ellipse(ox * pixelWidth - pixelWidth / 2f, oy * pixelHeight - pixelHeight / 2f, 2 * r * pixelWidth, 2 * r * pixelHeight);
 
+        int x = 0;
+        int y = r;
+
+        int d = 1 - r;
+        int dE = 3;
+        int dSE = -2 * r + 5;
+
+        while (y > x) {
+            if (d < 0) {
+                d += dE;
+                dE += 2;
+                dSE += 2;
+            } else {
+                d += dSE;
+                dE += 2;
+                dSE += 4;
+                y--;
+            }
+
+            x++;
+            activatePixel(ox - 1 + y, oy + x);
+            activatePixel(ox - 1 + y + 1, oy + x);
+            activatePixel(ox - 1 + y - 1, oy + x);
+        }
     }
 
     public void activatePixel(int x, int y) {

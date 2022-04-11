@@ -3,8 +3,8 @@ import processing.core.PApplet;
 public class MainClass extends PApplet {
 
     private final CartesianGrid cartesianGrid;
-    private final int canvasWidth = 420;
-    private final int canvasHeight = 420;
+    private final int canvasWidth = 630;
+    private final int canvasHeight = 630;
 
 
     public MainClass() {
@@ -28,7 +28,7 @@ public class MainClass extends PApplet {
         background(255);
 
         cartesianGrid.draw();
-        cartesianGrid.drawCircle();
+        cartesianGrid.drawCircle(15, 15, 10);
     }
 
     @Override
