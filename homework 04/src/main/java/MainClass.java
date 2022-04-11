@@ -8,7 +8,7 @@ public class MainClass extends PApplet {
 
 
     public MainClass() {
-        this.cartesianGrid = new CartesianGrid(this, canvasWidth , canvasHeight, 16);
+        this.cartesianGrid = new CartesianGrid(this, canvasWidth , canvasHeight, 30, 30);
     }
 
     public void settings() {
@@ -20,6 +20,7 @@ public class MainClass extends PApplet {
         frameRate(30);
 
         surface.setTitle("Homework 4");
+        surface.setResizable(true);
     }
 
     @Override

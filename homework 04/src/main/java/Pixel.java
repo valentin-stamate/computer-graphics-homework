@@ -3,31 +3,36 @@ import processing.core.PApplet;
 public class Pixel {
     private boolean pixelOn = false;
     private final PApplet pApplet;
-    private final int x;
-    private final int y;
-    private final int pixelSize;
 
-    public Pixel(PApplet pApplet, int x, int y, int pixelSize) {
+    /* The position in the grid */
+    private final int row;
+    private final int column;
+
+    private final int pixelWidth;
+    private final int pixelHeight;
+
+    public Pixel(PApplet pApplet, int row, int column, int pixelWidth, int pixelHeight) {
         this.pApplet = pApplet;
-        this.x = x;
-        this.y = y;
-        this.pixelSize = pixelSize;
+
+        this.row = row;
+        this.column = column;
+
+        this.pixelWidth = pixelWidth;
+        this.pixelHeight = pixelHeight;
     }
 
     public void draw() {
-        pApplet.stroke(80);
-        pApplet.line(x, y - pixelSize / 2.0f, x, y + pixelSize / 2.0f);
-        pApplet.line(x - pixelSize / 2.0f, y, x + pixelSize / 2.0f, y);
+        int x = column * this.pixelWidth + pixelWidth / 2;
+        int y = row * this.pixelHeight + pixelHeight / 2;
 
-//        pApplet.noFill();
-//        pApplet.stroke(30);
-//        pApplet.rect(x - pixelSize / 2.0f, y - pixelSize / 2.0f,pixelSize, pixelSize);
+        pApplet.stroke(80);
+        pApplet.line(x, y - pixelHeight / 2.0f, x, y + pixelHeight / 2.0f);
+        pApplet.line(x - pixelWidth / 2.0f, y, x + pixelWidth / 2.0f, y);
 
         if (pixelOn) {
             pApplet.fill(30);
             pApplet.noStroke();
-//            pApplet.ellipse(x, y, pixelSize, pixelSize);
-            drawCircle(x, y, pixelSize);
+            pApplet.ellipse(x, y, pixelWidth, pixelHeight);
         }
     }
 
@@ -37,18 +42,6 @@ public class Pixel {
 
     public void deactivatePixel() {
         this.pixelOn = false;
-    }
-
-    private void drawCircle(int ox, int oy, int diameter) {
-        pApplet.stroke(20);
-
-        for (int y = oy - diameter / 2; y <= oy + diameter / 2; y++) {
-            for (int x = ox - diameter / 2; x <= ox + diameter / 2; x++) {
-                if (isIn(x, y, ox, oy, diameter / 2)) {
-                    pApplet.point(x, y);
-                }
-            }
-        }
     }
 
     public boolean isIn(int x, int y, int ox, int oy, int radius) {
