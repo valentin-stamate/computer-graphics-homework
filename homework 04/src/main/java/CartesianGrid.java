@@ -68,6 +68,56 @@ public class CartesianGrid {
         }
     }
 
+    /* Exercise 2 */
+    public void fillEllipse(int ox, int oy, int a, int b) {
+        int x = 0;
+        int y = b;
+
+        double fxpyp = 0;
+        double deltaE;
+        double deltaSE;
+        double deltaS;
+
+        /* Regiunea 1 */
+        while (a * a * (y - 0.5) > b * b * (x + 1)) {
+            deltaE = b * b * (2 * x + 1);
+            deltaSE = b * b * (2 * x + 1) + a * a * (-2 * y + 1);
+
+            if (fxpyp + deltaE <= 0) {
+                /* E este in interior */
+                fxpyp += deltaE;
+                x++;
+            } else if (fxpyp + deltaSE <= 0) {
+                /* SE este in interior */
+                fxpyp += deltaSE;
+                x++;
+                y--;
+            }
+
+            activatePixel(ox + x, oy + y);
+        }
+
+        /* Regiunea 2 */
+        while (y < 0) {
+            deltaSE = b * b * (2 * x + 1) + a * a * (-2 * y + 1);
+            deltaS = a * a * (-2 * y + 1);
+
+            if (fxpyp + deltaSE <= 0) {
+                /* SE este in interior */
+                fxpyp += deltaSE;
+                x++;
+                y--;
+            } else {
+                /* S este in interior */
+                fxpyp += deltaS;
+                y--;
+            }
+
+            activatePixel(ox + x, oy + y);
+        }
+
+    }
+
     public void activatePixel(int x, int y) {
         pixels[y][x].activatePixel();
     }

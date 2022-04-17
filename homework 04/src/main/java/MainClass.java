@@ -29,6 +29,7 @@ public class MainClass extends PApplet {
 
         cartesianGrid.draw();
         cartesianGrid.drawCircle(15, 15, 10);
+//        cartesianGrid.fillEllipse(14, 14, 10, 14);
     }
 
     @Override
