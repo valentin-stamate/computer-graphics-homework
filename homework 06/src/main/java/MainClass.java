@@ -1,6 +1,7 @@
 import processing.core.PApplet;
 
 public class MainClass extends PApplet {
+    private final float radAngle = (float) Math.PI / 180f;
 
     public void settings() {
         size(630, 630, P3D);
@@ -8,45 +9,74 @@ public class MainClass extends PApplet {
 
     public void setup() {
         background(255);
-        frameRate(30);
+        frameRate(60);
 
         surface.setTitle("Homework 6");
     }
 
     float r = 0;
-    float angle = ((float) Math.PI) / 180f;
 
     @Override
     public void draw() {
         background(20);
         rectMode(CENTER);
 
-        noFill();
-        stroke(255);
+        pushMatrix();
+        translate(width / 2f, height / 2f, 0);
+        fill(255);
+        ellipse(0, 0, 5, 5);
+        popMatrix();
 
-        playTriangle();
+//        playTriangle();
+        playCube();
+    }
+
+    int cubeSize = 100;
+    float offset = cubeSize / 2f;
+
+    public void playCube() {
+        fill(255);
+        stroke(20);
+        strokeWeight(2);
+
+        pushMatrix();
+
+        translate(width / 2f, height / 2f, 0);
+        rotateZ(r);
+
+        rotateX(radians(55));
+        rotateZ(radians(45));
+
+        translate(offset, offset, offset);
+        box(cubeSize);
+
+        r -= radians(1);
+        popMatrix();
     }
 
     public void playRectangle() {
+        pushMatrix();
         translate(width / 2f, height / 2f, 0);
         rotateX(r);
         rotateY(r);
         rotateZ(r);
         rect(0,0, 100,100);
 
-        r += angle;
+        r += radians(1);
 
         rotateX(0);
         rotateY(0);
         rotateZ(0);
+        popMatrix();
     }
 
     float zPosition = -1000;
-    float zAngle = 180 * angle;
-    float yAngle = 180 * angle;
-    float xAngle = 180 * angle;
+    float zAngle = radians(180);
+    float yAngle = radians(180);
+    float xAngle = radians(180);
 
     public void playTriangle() {
+        pushMatrix();
         translate(width / 2f, height / 2f, zPosition);
         rotateX(xAngle);
         rotateY(yAngle);
@@ -54,24 +84,22 @@ public class MainClass extends PApplet {
         triangle(0, -66, 50, 33, -50, 33);
 
         if (xAngle > 0f) {
-            xAngle -= 1.8 * angle;
+            xAngle -= 1.8 * radians(1);
         }
 
         if (yAngle > 0f) {
-            yAngle -= 1.8 * angle;
+            yAngle -= 1.8 * radians(1);
         }
 
         if (zAngle > 0f) {
-            zAngle -= 1.8 * angle;
+            zAngle -= 1.8 * radians(1);
         }
 
         if (zPosition < 0) {
             zPosition += 10f;
         }
 
-        rotateX(0);
-        rotateY(0);
-        rotateZ(0);
+        popMatrix();
     }
 
     @Override
@@ -84,5 +112,9 @@ public class MainClass extends PApplet {
 
     public static void main(String... args){
         PApplet.main("MainClass");
+    }
+
+    public float radians(int angle) {
+        return  radAngle * angle;
     }
 }
