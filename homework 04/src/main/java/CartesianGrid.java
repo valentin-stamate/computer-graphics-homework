@@ -4,8 +4,8 @@ public class CartesianGrid {
 
     final PApplet pApplet;
     final Pixel[][] pixels;
-    final int rows;
-    final int columns;
+    public int rows;
+    public int columns;
 
     final int pixelWidth;
     final int pixelHeight;
@@ -40,12 +40,12 @@ public class CartesianGrid {
         pApplet.stroke(255, 20, 20);
         pApplet.strokeWeight(2);
         pApplet.noFill();
-        pApplet.ellipse(ox * pixelWidth - pixelWidth / 2f, oy * pixelHeight - pixelHeight / 2f, 2 * r * pixelWidth, 2 * r * pixelHeight);
+        pApplet.ellipse(ox * pixelWidth - pixelWidth / 2f, (columns - oy - 1) * pixelHeight - pixelHeight / 2f, 2 * r * pixelWidth, 2 * r * pixelHeight);
 
         int x = 0;
         int y = r;
 
-        int d = 1 - r;
+        int d = 3 - 2 * r;
         int dE = 3;
         int dSE = -2 * r + 5;
 
@@ -112,14 +112,16 @@ public class CartesianGrid {
                 fxpyp += deltaS;
                 y--;
             }
-
             activatePixel(ox + x, oy + y);
         }
 
     }
 
     public void activatePixel(int x, int y) {
-        pixels[y][x].activatePixel();
+        try {
+            pixels[y][x].activatePixel();
+        } catch (Exception ignored) {
+        }
     }
 
 }
