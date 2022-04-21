@@ -3,14 +3,17 @@ import processing.core.PApplet;
 public class MainClass extends PApplet {
     private final float radAngle = (float) Math.PI / 180f;
 
+    private final int canvasWidth = 630;
+    private final int canvasHeight = 630;
+
     public void settings() {
-        size(630, 630, P3D);
+        size(canvasWidth, canvasHeight, P3D);
     }
 
     public void setup() {
         background(255);
         frameRate(60);
-
+        surface.setResizable(true);
         surface.setTitle("Homework 6");
     }
 
@@ -21,14 +24,25 @@ public class MainClass extends PApplet {
         background(20);
         rectMode(CENTER);
 
+        float currentWidthScale = 1f * width / canvasWidth;
+        float currentHeightScale = 1f * height / canvasHeight;
+
         pushMatrix();
+
         translate(width / 2f, height / 2f, 0);
         fill(255);
+        noStroke();
         ellipse(0, 0, 5, 5);
         popMatrix();
 
+        pushMatrix();
+        translate(width / 2f, height / 2f, 0);
+        scale(currentWidthScale, currentHeightScale);
+        translate(-width / 2f, -height / 2f, 0);
+
 //        playTriangle();
         playCube();
+        popMatrix();
     }
 
     int cubeSize = 100;
