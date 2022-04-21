@@ -1,10 +1,16 @@
 import processing.core.PApplet;
+import processing.event.Event;
 
 public class MainClass extends PApplet {
     private final float radAngle = (float) Math.PI / 180f;
 
     private final int canvasWidth = 630;
     private final int canvasHeight = 630;
+
+    float zPosition = -1000;
+    float zAngle = radians(180);
+    float yAngle = radians(180);
+    float xAngle = radians(180);
 
     public void settings() {
         size(canvasWidth, canvasHeight, P3D);
@@ -18,6 +24,7 @@ public class MainClass extends PApplet {
     }
 
     float r = 0;
+    char keyPressed = '1';
 
     @Override
     public void draw() {
@@ -28,20 +35,16 @@ public class MainClass extends PApplet {
         float currentHeightScale = 1f * height / canvasHeight;
 
         pushMatrix();
-
-        translate(width / 2f, height / 2f, 0);
-        fill(255);
-        noStroke();
-        ellipse(0, 0, 5, 5);
-        popMatrix();
-
-        pushMatrix();
+        /* Scaling when screen resize */
         translate(width / 2f, height / 2f, 0);
         scale(currentWidthScale, currentHeightScale);
         translate(-width / 2f, -height / 2f, 0);
 
-//        playTriangle();
-        playCube();
+        if (keyPressed == '1') {
+            playTriangle();
+        } else if (keyPressed == '2') {
+            playCube();
+        }
         popMatrix();
     }
 
@@ -84,11 +87,6 @@ public class MainClass extends PApplet {
         popMatrix();
     }
 
-    float zPosition = -1000;
-    float zAngle = radians(180);
-    float yAngle = radians(180);
-    float xAngle = radians(180);
-
     public void playTriangle() {
         pushMatrix();
         translate(width / 2f, height / 2f, zPosition);
@@ -122,6 +120,19 @@ public class MainClass extends PApplet {
     @Override
     public void mouseReleased() {
 
+    }
+
+    @Override
+    public void keyPressed() {
+        keyPressed = key;
+
+        /* Reset Everything */
+        if (keyPressed == '1') {
+            zPosition = -1000;
+            zAngle = radians(180);
+            yAngle = radians(180);
+            xAngle = radians(180);
+        }
     }
 
     public static void main(String... args){
