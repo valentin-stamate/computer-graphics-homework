@@ -93,6 +93,8 @@ public class MainClass extends PApplet {
         rotateX(xAngle);
         rotateY(yAngle);
         rotateZ(zAngle);
+
+        noStroke();
         triangle(0, -66, 50, 33, -50, 33);
 
         if (xAngle > 0f) {
