@@ -1,5 +1,4 @@
 import processing.core.PApplet;
-import processing.event.Event;
 
 public class MainClass extends PApplet {
     private final float radAngle = (float) Math.PI / 180f;
