@@ -56,20 +56,7 @@ public class MainClass extends PApplet {
         rotateZ(rotationZ);
         /* Here the magic ends */
 
-        Color col;
-        /* Draw The Axis Lines */
-        int axisLength = 400;
-
-        strokeWeight(2);
-        col = Colors.GREEN;
-        stroke(col.r, col.g, col.b);
-        line(axisLength, 0, 0, 0, 0, 0);
-        col = Colors.BLUE;
-        stroke(col.r, col.g, col.b);
-        line(0, axisLength, 0, 0, 0, 0);
-        col = Colors.RED;
-        stroke(col.r, col.g, col.b);
-        line(0, 0, axisLength, 0, 0, 0);
+        drawAxis(400);
 
         int l = 100;
         int hl = l / 2;
@@ -78,6 +65,21 @@ public class MainClass extends PApplet {
 
         drawCube(l);
         popMatrix();
+    }
+
+    private void drawAxis(int len) {
+        Color col;
+
+        strokeWeight(2);
+        col = Colors.GREEN;
+        stroke(col.r, col.g, col.b);
+        line(len, 0, 0, 0, 0, 0);
+        col = Colors.BLUE;
+        stroke(col.r, col.g, col.b);
+        line(0, len, 0, 0, 0, 0);
+        col = Colors.RED;
+        stroke(col.r, col.g, col.b);
+        line(0, 0, len, 0, 0, 0);
     }
 
     public void drawCube(int l) {

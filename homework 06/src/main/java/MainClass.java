@@ -6,7 +6,7 @@ public class MainClass extends PApplet {
     private final int canvasWidth = 630;
     private final int canvasHeight = 630;
 
-    float zPosition = -1000;
+    float xPosition = 600;
     float zAngle = radians(180);
     float yAngle = radians(180);
     float xAngle = radians(180);
@@ -51,6 +51,17 @@ public class MainClass extends PApplet {
     float offset = cubeSize / 2f;
 
     public void playCube() {
+        pushMatrix();
+        translate(width / 2f, height / 2f, 0);
+        scale(1f, -1f, 1f);
+
+        rotateZ(radians(-60));
+        rotateX(radians(55));
+        rotateZ(radians(45));
+
+        drawAxis(400);
+        popMatrix();
+
         fill(255);
         stroke(20);
         strokeWeight(2);
@@ -70,31 +81,25 @@ public class MainClass extends PApplet {
         popMatrix();
     }
 
-    public void playRectangle() {
-        pushMatrix();
-        translate(width / 2f, height / 2f, 0);
-        rotateX(r);
-        rotateY(r);
-        rotateZ(r);
-        rect(0,0, 100,100);
-
-        r += radians(1);
-
-        rotateX(0);
-        rotateY(0);
-        rotateZ(0);
-        popMatrix();
-    }
-
     public void playTriangle() {
         pushMatrix();
-        translate(width / 2f, height / 2f, zPosition);
+
+        translate(width / 2f, height / 2f, 0);
+        scale(1f, -1f, 1f);
+        rotateZ(radians(-60));
+        rotateX(radians(55));
+        rotateZ(radians(45));
+        drawAxis(400);
+        translate(xPosition, 100, 100);
+
         rotateX(xAngle);
         rotateY(yAngle);
         rotateZ(zAngle);
 
         noStroke();
-        triangle(0, -66, 50, 33, -50, 33);
+        rotateY(radians(-90));
+        triangle(0, 66, 50, -33, -50, -33);
+        rotateY(radians(90));
 
         if (xAngle > 0f) {
             xAngle -= 1.8 * radians(1);
@@ -108,11 +113,26 @@ public class MainClass extends PApplet {
             zAngle -= 1.8 * radians(1);
         }
 
-        if (zPosition < 0) {
-            zPosition += 10f;
+        if (xPosition > 0) {
+            xPosition -= 6f;
         }
 
         popMatrix();
+    }
+
+    private void drawAxis(int len) {
+        Color col;
+
+        strokeWeight(2);
+        col = Colors.GREEN;
+        stroke(col.r, col.g, col.b);
+        line(len, 0, 0, 0, 0, 0);
+        col = Colors.BLUE;
+        stroke(col.r, col.g, col.b);
+        line(0, len, 0, 0, 0, 0);
+        col = Colors.RED;
+        stroke(col.r, col.g, col.b);
+        line(0, 0, len, 0, 0, 0);
     }
 
     @Override
@@ -129,7 +149,7 @@ public class MainClass extends PApplet {
 
         /* Reset Everything */
         if (keyPressed == '1') {
-            zPosition = -1000;
+            xPosition = 600;
             zAngle = radians(180);
             yAngle = radians(180);
             xAngle = radians(180);
